@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: felipegirotti
- * Date: 5/5/17
- * Time: 10:39 PM
- */
 
 namespace GYG\Domain\Service;
 
@@ -33,33 +27,53 @@ class PartnerProductServiceImpl implements PartnerProductService
     {
         $response = [];
         $productsClient = $this->partnerClient->search();
-        if (!empty($productsClient)) {
-            $productsFiltered = new BetweenPeriodIterator($productsClient, $request);
+        if (empty($productsClient)) {
+            return $response;
+        }
 
-            /** @var  $product \GYG\Infrastructure\Client\Entities\SearchProductResponse */
-            foreach ($productsFiltered as $product) {
+        $productsFiltered = new BetweenPeriodIterator($productsClient, $request);
 
-                $productFound = array_column($response, 'product_id');
+        /** @var  $product \GYG\Infrastructure\Client\Entities\SearchProductResponse */
+        foreach ($productsFiltered as $product) {
+            $productFound = array_column($response, 'product_id');
 
-                $key = array_search($product->getProductId(), $productFound);
+            $key = array_search($product->getProductId(), $productFound);
 
-                if (!empty($productFound) && $key !== false) {
-                    $tempAvailability = $response[$key]['available_starttimes'];
-                    $tempAvailability[] = $product->getActivityStartDatetime()
-                        ->format(self::DEFAULT_FORMATTER);
-                    sort($tempAvailability);
+            if ($key !== false) {
+                $tempAvailability = $response[$key]['available_starttimes'];
+                $tempAvailability[] = $product->getActivityStartDatetime()
+                    ->format(self::DEFAULT_FORMATTER);
+                sort($tempAvailability);
 
-                    $response[$key]['available_starttimes'][] = $tempAvailability;
+                $response[$key]['available_starttimes'] = $tempAvailability;
+            } else {
+                $key = count($response) -1;
+                $productFormatted =  $this->formatResponseItem($product);
+                if ($key < 0) {
+                    $response[] = $productFormatted;
+                    continue;
+                }
 
+                $temp =  $response[$key];
+                if (\DateTime::createFromFormat(self::DEFAULT_FORMATTER, $temp['available_starttimes'][0])
+                    > $product->getActivityStartDatetime()) {
+                    $response[] = $temp;
+                    $response[$key] = $productFormatted;
                 } else {
-                    $response[] = [
-                        'product_id' => $product->getProductId(),
-                        'available_starttimes' => [$product->getActivityStartDatetime()->format(self::DEFAULT_FORMATTER)]
-                    ];
+                    $response[] = $productFormatted;
                 }
             }
         }
 
-        return array_values($response);
+        return $response;
+    }
+
+    private function formatResponseItem(\GYG\Infrastructure\Client\Entities\SearchProductResponse $product)
+    {
+        return [
+            'product_id' => $product->getProductId(),
+            'available_starttimes' => [$product->getActivityStartDatetime()
+                ->format(self::DEFAULT_FORMATTER)]
+        ];
     }
 }

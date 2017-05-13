@@ -1,16 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: felipegirotti
- * Date: 5/11/17
- * Time: 9:38 PM
- */
 
 namespace GYG\Domain\Service;
 
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
@@ -59,14 +52,15 @@ class PartnerProductServiceTest extends TestCase
 
     public function testSearchProductsShouldBeThreeProducts()
     {
-        $request = new SearchProductsRequest(new \DateTime('2017-07-07T10:20'), new \DateTime('2017-12-15T00:00'), 3);
+        $request = new SearchProductsRequest(new \DateTime('2017-07-04T10:20'), new \DateTime('2017-12-15T00:00'), 3);
         $response = $this->service->searchProducts($request);
 
-        $this->assertEquals(3, count($response));
-        $this->assertEquals('679', $response[0]['product_id']);
-        $this->assertEquals(3, count($response[0]['available_starttimes']));
-        $this->assertEquals('2017-07-07T10:30', $response[0]['available_starttimes'][0]);
-        $this->assertEquals('2017-10-03T14:45', $response[0]['available_starttimes'][0]);
+        $this->assertEquals(4, count($response));
+        $this->assertEquals('23', $response[0]['product_id']);
+        $this->assertEquals(3, count($response[1]['available_starttimes']));
+        $this->assertEquals('2017-07-07T10:30', $response[1]['available_starttimes'][0]);
+        $this->assertEquals('2017-10-03T14:45', $response[1]['available_starttimes'][1]);
+
     }
 
     public function testSearchProductsShouldBeThreeProductsWithLessStartTimes()

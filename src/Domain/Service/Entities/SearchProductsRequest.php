@@ -2,12 +2,6 @@
 
 namespace GYG\Domain\Service\Entities;
 
-/**
- * Created by PhpStorm.
- * User: felipegirotti
- * Date: 5/5/17
- * Time: 11:03 PM
- */
 class SearchProductsRequest
 {
     /**

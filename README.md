@@ -1,7 +1,6 @@
-# GYG
-
 ## Overview
-Given the provided API endpoint containing product availabilities, please write a CLI PHP script that retrieves the product_ids of the products that are available to be booked given a period of time and the requested number of travellers.
+Given the provided API endpoint containing product availabilities,
+please write a CLI PHP script that retrieves the product_ids of the products that are available to be booked given a period of time and the requested number of travellers.
 
 
 The script should accept 4 command line arguments:

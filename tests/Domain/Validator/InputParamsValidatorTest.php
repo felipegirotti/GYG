@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: felipegirotti
- * Date: 5/11/17
- * Time: 10:43 PM
- */
 
 namespace GYG\Domain\Validator;
 

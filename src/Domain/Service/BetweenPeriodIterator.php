@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: felipegirotti
- * Date: 5/5/17
- * Time: 11:13 PM
- */
 
 namespace GYG\Domain\Service;
 
