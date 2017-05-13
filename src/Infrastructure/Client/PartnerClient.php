@@ -5,12 +5,6 @@ namespace GYG\Infrastructure\Client;
 use GYG\Infrastructure\Client\Entities\SearchProductResponse;
 use GuzzleHttp\Client;
 
-/**
- * Created by PhpStorm.
- * User: felipegirotti
- * Date: 5/5/17
- * Time: 10:41 PM
- */
 class PartnerClient
 {
 
@@ -46,17 +40,7 @@ class PartnerClient
 
         $this->validate($products);
 
-        $items = [];
-        foreach ($products['product_availabilities'] as $product) {
-            if ($this->validateItem($product)) {
-                $items[] = new SearchProductResponse(
-                    $product['activity_start_datetime'],
-                    $product['places_available'],
-                    $product['activity_duration_in_minutes'],
-                    $product['product_id']
-                );
-            }
-        }
+        $items = $this->populateItems($products);
 
         return new \ArrayIterator($items);
     }
@@ -74,5 +58,25 @@ class PartnerClient
             && isset($product['places_available'])
             && isset($product['activity_duration_in_minutes'])
             && isset($product['product_id']);
+    }
+
+    /**
+     * @param $products
+     * @return array
+     */
+    protected function populateItems($products)
+    {
+        $items = [];
+        foreach ($products['product_availabilities'] as $product) {
+            if ($this->validateItem($product)) {
+                $items[] = new SearchProductResponse(
+                    $product['activity_start_datetime'],
+                    $product['places_available'],
+                    $product['activity_duration_in_minutes'],
+                    $product['product_id']
+                );
+            }
+        }
+        return $items;
     }
 }

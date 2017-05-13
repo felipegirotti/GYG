@@ -50,6 +50,15 @@ class PartnerProductServiceTest extends TestCase
         $this->setUpService($this->defaultResponse());
     }
 
+    public function testSearchProductsEmpty()
+    {
+        $this->setUpService(new Response(200, ['Content-type' => 'application/json;charset=utf-8'], '{"product_availabilities": []}'));
+        $request = new SearchProductsRequest(new \DateTime('2017-07-04T10:20'), new \DateTime('2017-12-15T00:00'), 3);
+        $response = $this->service->searchProducts($request);
+
+        $this->assertEmpty($response);
+    }
+
     public function testSearchProductsShouldBeThreeProducts()
     {
         $request = new SearchProductsRequest(new \DateTime('2017-07-04T10:20'), new \DateTime('2017-12-15T00:00'), 3);

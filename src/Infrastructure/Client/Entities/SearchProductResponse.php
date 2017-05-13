@@ -2,12 +2,6 @@
 
 namespace GYG\Infrastructure\Client\Entities;
 
-/**
- * Created by PhpStorm.
- * User: felipegirotti
- * Date: 5/5/17
- * Time: 10:42 PM
- */
 class SearchProductResponse
 {
     private $placesAvailable;
