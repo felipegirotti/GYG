@@ -26,7 +26,7 @@ class BetweenPeriodIterator extends \FilterIterator
     public function accept()
     {
         if (!$this->getInnerIterator()->valid()) {
-            return false;// @codeCoverageIgnore
+            return false; // @codeCoverageIgnore
         }
         /** @var $row \GYG\Infrastructure\Client\Entities\SearchProductResponse */
         $row = $this->getInnerIterator()->current();

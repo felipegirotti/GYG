@@ -43,14 +43,14 @@ class PartnerProductServiceImpl implements PartnerProductService
             if ($key !== false) {
                 $response[$key]['available_starttimes'] = $this->availabilityTimes($response, $key, $product);
             } else {
-                $key = count($response) -1;
-                $productFormatted =  $this->formatResponseItem($product);
+                $key = count($response)-1;
+                $productFormatted = $this->formatResponseItem($product);
                 if ($key < 0) {
                     $response[] = $productFormatted;
                     continue;
                 }
 
-                $temp =  $response[$key];
+                $temp = $response[$key];
                 if (\DateTime::createFromFormat(self::DEFAULT_FORMATTER, $temp['available_starttimes'][0])
                     > $product->getActivityStartDatetime()) {
                     $response[] = $temp;
