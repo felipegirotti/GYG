@@ -1,3 +1,5 @@
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/felipegirotti/GYG/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/felipegirotti/GYG/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/felipegirotti/GYG/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/felipegirotti/GYG/?branch=master) [![Build Status](https://scrutinizer-ci.com/g/felipegirotti/GYG/badges/build.png?b=master)](https://scrutinizer-ci.com/g/felipegirotti/GYG/build-status/master)
+
 ## Overview
 Given the provided API endpoint containing product availabilities,
 please write a CLI PHP script that retrieves the product_ids of the products that are available to be booked given a period of time and the requested number of travellers.
