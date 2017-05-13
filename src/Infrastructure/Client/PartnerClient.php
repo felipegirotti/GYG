@@ -33,7 +33,7 @@ class PartnerClient
 
         $clientResponse = $this->httpClient->get('');
         if ($clientResponse->getStatusCode() !== 200) {
-            throw new \RuntimeException(self::ERROR_TO_FETCH_DATA);// @codeCoverageIgnore
+            throw new \RuntimeException(self::ERROR_TO_FETCH_DATA); // @codeCoverageIgnore
         }
 
         $products = json_decode($clientResponse->getBody()->getContents(), true);
