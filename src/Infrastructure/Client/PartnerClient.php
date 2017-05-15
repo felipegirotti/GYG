@@ -77,6 +77,14 @@ class PartnerClient
                 );
             }
         }
+
+        uasort($items, ['\GYG\Infrastructure\Client\PartnerClient', 'sort']);
+
         return $items;
+    }
+
+    public static function sort(SearchProductResponse $a, SearchProductResponse $b)
+    {
+        return $a->getActivityStartDatetime()->getTimestamp() - $b->getActivityStartDatetime()->getTimestamp();
     }
 }

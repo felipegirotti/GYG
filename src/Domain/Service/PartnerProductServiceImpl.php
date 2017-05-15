@@ -42,23 +42,10 @@ class PartnerProductServiceImpl implements PartnerProductService
 
             if ($key !== false) {
                 $response[$key]['available_starttimes'] = $this->availabilityTimes($response, $key, $product);
-            } else {
-                $key = count($response)-1;
-                $productFormatted = $this->formatResponseItem($product);
-                if ($key < 0) {
-                    $response[] = $productFormatted;
-                    continue;
-                }
-
-                $temp = $response[$key];
-                if (\DateTime::createFromFormat(self::DEFAULT_FORMATTER, $temp['available_starttimes'][0])
-                    > $product->getActivityStartDatetime()) {
-                    $response[] = $temp;
-                    $response[$key] = $productFormatted;
-                } else {
-                    $response[] = $productFormatted;
-                }
+                continue;
             }
+
+            $response[] = $this->formatResponseItem($product);
         }
 
         return $response;
@@ -84,7 +71,6 @@ class PartnerProductServiceImpl implements PartnerProductService
         $tempAvailability = $response[$key]['available_starttimes'];
         $tempAvailability[] = $product->getActivityStartDatetime()
             ->format(self::DEFAULT_FORMATTER);
-        sort($tempAvailability);
         return $tempAvailability;
     }
 }

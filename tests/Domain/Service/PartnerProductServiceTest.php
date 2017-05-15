@@ -24,7 +24,7 @@ class PartnerProductServiceTest extends TestCase
             {"places_available": 25, "activity_duration_in_minutes": 255, "product_id": 23, "activity_start_datetime": "2017-07-05T10:30"},
             {"places_available": 63, "activity_duration_in_minutes": 915, "product_id": 197, "activity_start_datetime": "2017-12-14T13:45"},
             {"places_available": 3, "activity_duration_in_minutes": 165, "product_id": 679, "activity_start_datetime": "2017-10-07T14:45"},
-            {"places_available": 3, "activity_duration_in_minutes": 165, "product_id": 679, "activity_start_datetime": "2017-10-03T14:45"},
+            {"places_available": 3, "activity_duration_in_minutes": 165, "product_id": 679, "activity_start_datetime": "2017-07-06T14:45"},
             {"places_available": 55, "activity_duration_in_minutes": 1305, "product_id": 277, "activity_start_datetime": "2017-10-10T21:30"}
             ]}';
 
@@ -59,7 +59,7 @@ class PartnerProductServiceTest extends TestCase
         $this->assertEmpty($response);
     }
 
-    public function testSearchProductsShouldBeThreeProducts()
+    public function testSearchProductsShouldBeAllProducts()
     {
         $request = new SearchProductsRequest(new \DateTime('2017-07-04T10:20'), new \DateTime('2017-12-15T00:00'), 3);
         $response = $this->service->searchProducts($request);
@@ -67,8 +67,8 @@ class PartnerProductServiceTest extends TestCase
         $this->assertEquals(4, count($response));
         $this->assertEquals('23', $response[0]['product_id']);
         $this->assertEquals(3, count($response[1]['available_starttimes']));
-        $this->assertEquals('2017-07-07T10:30', $response[1]['available_starttimes'][0]);
-        $this->assertEquals('2017-10-03T14:45', $response[1]['available_starttimes'][1]);
+        $this->assertEquals('2017-07-06T14:45', $response[1]['available_starttimes'][0]);
+        $this->assertEquals('2017-07-07T10:30', $response[1]['available_starttimes'][1]);
 
     }
 
