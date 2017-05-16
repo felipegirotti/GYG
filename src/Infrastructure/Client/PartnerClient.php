@@ -89,6 +89,6 @@ class PartnerClient
 
     public static function sort(SearchProductResponse $a, SearchProductResponse $b)
     {
-        return $a->getActivityStartDatetime()->getTimestamp() - $b->getActivityStartDatetime()->getTimestamp();
+        return $a->getActivityStartDatetime()->getTimestamp()-$b->getActivityStartDatetime()->getTimestamp();
     }
 }
