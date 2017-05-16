@@ -33,7 +33,7 @@ class SearchProductsRequest
     }
 
     /**
-     * @return DateTime
+     * @return \DateTime
      */
     public function getStartTime()
     {
@@ -41,7 +41,7 @@ class SearchProductsRequest
     }
 
     /**
-     * @return DateTime
+     * @return \DateTime
      */
     public function getEndTime()
     {

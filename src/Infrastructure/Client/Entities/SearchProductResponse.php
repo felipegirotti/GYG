@@ -31,6 +31,7 @@ class SearchProductResponse
     }
 
     /**
+     * @codeCoverageIgnore
      * @return mixed
      */
     public function getPlacesAvailable()

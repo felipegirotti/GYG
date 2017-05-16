@@ -3,6 +3,7 @@
 namespace GYG\Domain\Service;
 
 use GYG\Domain\Service\Entities\SearchProductsRequest as Request;
+use GYG\Infrastructure\Client\Entities\SearchProductsRequest;
 
 class PartnerProductServiceImpl implements PartnerProductService
 {
@@ -26,16 +27,19 @@ class PartnerProductServiceImpl implements PartnerProductService
     public function searchProducts(Request $request)
     {
         $response = [];
-        $productsClient = $this->partnerClient->search();
+        $requestClient = new SearchProductsRequest(
+            $request->getStartTime(),
+            $request->getEndTime(),
+            $request->getNumberOfTravelers()
+        );
+        $productsClient = $this->partnerClient->search($requestClient);
 
         if ($productsClient->count() == 0) {
             return $response;
         }
 
-        $productsFiltered = new BetweenPeriodIterator($productsClient, $request);
-
         /** @var  $product \GYG\Infrastructure\Client\Entities\SearchProductResponse */
-        foreach ($productsFiltered as $product) {
+        foreach ($productsClient as $product) {
             $productFound = array_column($response, 'product_id');
 
             $key = array_search($product->getProductId(), $productFound);

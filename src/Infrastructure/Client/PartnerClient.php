@@ -4,6 +4,7 @@ namespace GYG\Infrastructure\Client;
 
 use GYG\Infrastructure\Client\Entities\SearchProductResponse;
 use GuzzleHttp\Client;
+use GYG\Infrastructure\Client\Entities\SearchProductsRequest;
 
 class PartnerClient
 {
@@ -24,11 +25,11 @@ class PartnerClient
         $this->httpClient = $httpClient;
     }
 
-
     /**
+     * @param SearchProductsRequest $request
      * @return \ArrayIterator
      */
-    public function search()
+    public function search(SearchProductsRequest $request)
     {
 
         $clientResponse = $this->httpClient->get('');
@@ -36,11 +37,14 @@ class PartnerClient
             throw new \RuntimeException(self::ERROR_TO_FETCH_DATA); // @codeCoverageIgnore
         }
 
-        $products = json_decode($clientResponse->getBody()->getContents(), true);
+        $response = json_decode($clientResponse->getBody()->getContents(), true);
 
-        $this->validate($products);
+        $this->validate($response);
 
-        $items = $this->populateItems($products);
+        $items = $this->populateItems(new BetweenPeriodIterator(
+            new \ArrayIterator($response['product_availabilities']),
+            $request
+        ));
 
         return new \ArrayIterator($items);
     }
@@ -67,7 +71,7 @@ class PartnerClient
     protected function populateItems($products)
     {
         $items = [];
-        foreach ($products['product_availabilities'] as $product) {
+        foreach ($products as $product) {
             if ($this->validateItem($product)) {
                 $items[] = new SearchProductResponse(
                     $product['activity_start_datetime'],
