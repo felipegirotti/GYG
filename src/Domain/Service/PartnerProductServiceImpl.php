@@ -4,6 +4,8 @@ namespace GYG\Domain\Service;
 
 use GYG\Domain\Service\Entities\SearchProductsRequest as Request;
 use GYG\Infrastructure\Client\Entities\SearchProductsRequest;
+use \GYG\Infrastructure\Client\Entities\SearchProductResponse;
+use GYG\Infrastructure\Client\PartnerClient;
 
 class PartnerProductServiceImpl implements PartnerProductService
 {
@@ -18,12 +20,16 @@ class PartnerProductServiceImpl implements PartnerProductService
      * PartnerProductServiceImpl constructor.
      * @param \GYG\Infrastructure\Client\PartnerClient $partnerClient
      */
-    public function __construct(\GYG\Infrastructure\Client\PartnerClient $partnerClient)
+    public function __construct(PartnerClient $partnerClient)
     {
         $this->partnerClient = $partnerClient;
     }
 
 
+    /**
+     * @param Request $request
+     * @return array
+     */
     public function searchProducts(Request $request)
     {
         $response = [];
@@ -38,6 +44,30 @@ class PartnerProductServiceImpl implements PartnerProductService
             return $response;
         }
 
+        return $this->populateItems($productsClient, $response);
+    }
+
+    /**
+     * @param $response
+     * @param $key
+     * @param \GYG\Infrastructure\Client\Entities\SearchProductResponse $product
+     * @return array
+     */
+    protected function availabilityTimes($response, $key, SearchProductResponse $product)
+    {
+        $tempAvailability = $response[$key]['available_starttimes'];
+        $tempAvailability[] = $product->getActivityStartDatetime()
+            ->format(self::DEFAULT_FORMATTER);
+        return $tempAvailability;
+    }
+
+    /**
+     * @param $productsClient
+     * @param $response
+     * @return array
+     */
+    protected function populateItems($productsClient, $response)
+    {
         /** @var  $product \GYG\Infrastructure\Client\Entities\SearchProductResponse */
         foreach ($productsClient as $product) {
             $productFound = array_column($response, 'product_id');
@@ -51,30 +81,19 @@ class PartnerProductServiceImpl implements PartnerProductService
 
             $response[] = $this->formatResponseItem($product);
         }
-
         return $response;
     }
 
-    private function formatResponseItem(\GYG\Infrastructure\Client\Entities\SearchProductResponse $product)
+    /**
+     * @param \GYG\Infrastructure\Client\Entities\SearchProductResponse $product
+     * @return array
+     */
+    private function formatResponseItem(SearchProductResponse $product)
     {
         return [
             'product_id' => $product->getProductId(),
             'available_starttimes' => [$product->getActivityStartDatetime()
                 ->format(self::DEFAULT_FORMATTER)]
         ];
-    }
-
-    /**
-     * @param $response
-     * @param $key
-     * @param $product
-     * @return array
-     */
-    protected function availabilityTimes($response, $key, $product)
-    {
-        $tempAvailability = $response[$key]['available_starttimes'];
-        $tempAvailability[] = $product->getActivityStartDatetime()
-            ->format(self::DEFAULT_FORMATTER);
-        return $tempAvailability;
     }
 }
